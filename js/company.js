@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", function () {
             stockPrice.innerHTML = `Stock Price: ${data.profile.price} <span style="color: ${data.profile.changesPercentage.indexOf("+") ? "green" : "red"}">${data.profile.changesPercentage}</span>`;
         });
 
-    getRequest(`https://stock-exchange-dot-full-stack-course-services.ew.r.appspot.com/api/v3/historical-price-full/${symbol}?serietype=line`, (responseText) => {
+    getRequest(`https://stock-exchange-dot-full-stack-course-services.ew.r.appspot.com/api/v3/historical-price-full/${symbol}?serietype=line&timeseries=400`, (responseText) => {
         let data = JSON.parse(responseText);
 
 

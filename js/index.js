@@ -1,7 +1,7 @@
 //https://financialmodelingprep.com/developer/docs/companies-key-stats-free-api/#Javascript
 
 
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", function() {
 
     var urlParams = new URLSearchParams(window.location.search);
     let query = urlParams.get('query');
@@ -14,13 +14,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function debounce(func, wait) {
         let timer = null;
-        return function () {
+        return function() {
             clearTimeout(timer);
             timer = setTimeout(func, wait);
         }
     }
 
-    search.addEventListener('input', debounce(function () {
+    search.addEventListener('input', debounce(function() {
         Search();
     }, 500));
 
@@ -47,21 +47,44 @@ Loading...
                 let rowsStr = "";
 
 
-                for (const item of list) {
-                    rowsStr += `
-<tr>
-    <td>
-        <div class="widget-26-job-title">
-            <a href="/company.html?symbol=${item.symbol}">
-                ${item.name} (${item.symbol})
-            </a>
-        </div>
-    </td>
-</tr>
-    `;
-                }
-                document.querySelector("#tblSearch").innerHTML = rowsStr;
+                let symbols = list.map(c => c.symbol);
 
+                let temparray, chunk = 3;
+                for (let i = 0, j = symbols.length; i < j; i += chunk) {
+                    temparray = symbols.slice(i, i + chunk);
+
+
+                    getRequest(
+                        `https://stock-exchange-dot-full-stack-course-services.ew.r.appspot.com/api/v3/company/profile/${temparray}`,
+                        (responseText2) => {
+                            let listComplete = JSON.parse(responseText2).companyProfiles || [JSON.parse(responseText2)];
+
+
+
+                            for (const item of listComplete) {
+                                rowsStr += `
+<tr>
+<td>
+<div class="widget-26-job-emp-img">
+<img src="${item.profile.image}"
+    alt="Company" />
+</div>
+</td>
+<td>
+<div class="widget-26-job-title">
+<a href="/company.html?symbol=${item.symbol}">
+    ${item.profile.companyName} (${item.symbol}) <span style="color: ${item.profile.changesPercentage.indexOf("+")?"green":"red"}">${item.profile.changesPercentage}</span>
+</a>
+</div>
+</td>
+</tr>
+`;
+                            }
+                            document.querySelector("#tblSearch").innerHTML = rowsStr;
+
+
+                        });
+                }
             });
 
     }
@@ -92,8 +115,8 @@ function getRequest(url, success) {
         }
     }
     if (!req) return false;
-    if (typeof success != 'function') success = function () { };
-    req.onreadystatechange = function () {
+    if (typeof success != 'function') success = function() {};
+    req.onreadystatechange = function() {
         if (req.readyState == 4) {
             if (req.status === 200) {
                 success(req.responseText)
