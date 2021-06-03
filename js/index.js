@@ -38,10 +38,8 @@ Loading...
 </tr>
     `;
 
-        getRequest(
-            `https://stock-exchange-dot-full-stack-course-services.ew.r.appspot.com/api/v3/search?query=${search.value}&limit=10&exchange=NASDAQ`,
-            (responseText) => {
-                let list = JSON.parse(responseText);
+        fetch(`https://stock-exchange-dot-full-stack-course-services.ew.r.appspot.com/api/v3/search?query=${search.value}&limit=10&exchange=NASDAQ`)
+            .then(response => response.json()).then(list => {
 
 
                 let rowsStr = "";
@@ -54,10 +52,9 @@ Loading...
                     temparray = symbols.slice(i, i + chunk);
 
 
-                    getRequest(
-                        `https://stock-exchange-dot-full-stack-course-services.ew.r.appspot.com/api/v3/company/profile/${temparray}`,
-                        (responseText2) => {
-                            let listComplete = JSON.parse(responseText2).companyProfiles || [JSON.parse(responseText2)];
+                    fetch(`https://stock-exchange-dot-full-stack-course-services.ew.r.appspot.com/api/v3/company/profile/${temparray}`)
+                        .then(response => response.json()).then(data => {
+                            let listComplete = data.companyProfiles || [data];
 
 
 
