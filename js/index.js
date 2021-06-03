@@ -1,13 +1,29 @@
 //https://financialmodelingprep.com/developer/docs/companies-key-stats-free-api/#Javascript
 
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
 
     var urlParams = new URLSearchParams(window.location.search);
     let query = urlParams.get('query');
 
     search.value = query;
     Search();
+
+
+
+
+    function debounce(func, wait) {
+        let timer = null;
+        return function () {
+            clearTimeout(timer);
+            timer = setTimeout(func, wait);
+        }
+    }
+
+    search.addEventListener('input', debounce(function () {
+        Search();
+    }, 500));
+
 });
 
 
@@ -76,8 +92,8 @@ function getRequest(url, success) {
         }
     }
     if (!req) return false;
-    if (typeof success != 'function') success = function() {};
-    req.onreadystatechange = function() {
+    if (typeof success != 'function') success = function () { };
+    req.onreadystatechange = function () {
         if (req.readyState == 4) {
             if (req.status === 200) {
                 success(req.responseText)

@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
 
     var urlParams = new URLSearchParams(window.location.search);
     let symbol = urlParams.get('symbol');
@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", function() {
             sector.innerHTML = data.profile.sector;
             description.innerHTML = data.profile.description;
 
-            stockPrice.innerHTML = `Stock Price: ${data.profile.price} <span style="color: ${data.profile.changesPercentage.indexOf("+")?"green":"red"}">${data.profile.changesPercentage}</span>`;
+            stockPrice.innerHTML = `Stock Price: ${data.profile.price} <span style="color: ${data.profile.changesPercentage.indexOf("+") ? "green" : "red"}">${data.profile.changesPercentage}</span>`;
         });
 
     getRequest(`https://stock-exchange-dot-full-stack-course-services.ew.r.appspot.com/api/v3/historical-price-full/${symbol}?serietype=line`, (responseText) => {
@@ -71,8 +71,8 @@ function getRequest(url, success) {
         }
     }
     if (!req) return false;
-    if (typeof success != 'function') success = function() {};
-    req.onreadystatechange = function() {
+    if (typeof success != 'function') success = function () { };
+    req.onreadystatechange = function () {
         if (req.readyState == 4) {
             if (req.status === 200) {
                 success(req.responseText)
