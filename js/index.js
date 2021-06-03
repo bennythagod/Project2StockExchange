@@ -1,8 +1,20 @@
 //https://financialmodelingprep.com/developer/docs/companies-key-stats-free-api/#Javascript
+
+
+document.addEventListener("DOMContentLoaded", function() {
+
+    var urlParams = new URLSearchParams(window.location.search);
+    let query = urlParams.get('query');
+
+    search.value = query;
+    Search();
+});
+
+
 function Search() {
+    if (search.value != null && search.value != "") {
 
-
-    document.querySelector("#tblSearch").innerHTML = `
+        document.querySelector("#tblSearch").innerHTML = `
 <tr>
 <td>
 Loading...
@@ -10,31 +22,33 @@ Loading...
 </tr>
     `;
 
-    getRequest(
-        `https://stock-exchange-dot-full-stack-course-services.ew.r.appspot.com/api/v3/search?query=${search.value}&limit=10&exchange=NASDAQ`,
-        (responseText) => {
-            let list = JSON.parse(responseText);
+        getRequest(
+            `https://stock-exchange-dot-full-stack-course-services.ew.r.appspot.com/api/v3/search?query=${search.value}&limit=10&exchange=NASDAQ`,
+            (responseText) => {
+                let list = JSON.parse(responseText);
 
 
-            let rowsStr = "";
+                let rowsStr = "";
 
 
-            for (const item of list) {
-                rowsStr += `
+                for (const item of list) {
+                    rowsStr += `
 <tr>
     <td>
         <div class="widget-26-job-title">
-            <a href="/company.html?symbol=${item.symbol}" target="_blank">
+            <a href="/company.html?symbol=${item.symbol}">
                 ${item.name} (${item.symbol})
             </a>
         </div>
     </td>
 </tr>
     `;
-            }
-            document.querySelector("#tblSearch").innerHTML = rowsStr;
+                }
+                document.querySelector("#tblSearch").innerHTML = rowsStr;
 
-        });
+            });
+
+    }
 }
 
 
